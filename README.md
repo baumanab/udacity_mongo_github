@@ -96,8 +96,10 @@ pipeline = [{'$group':{'_id': '$created.user',
              {u'_id': u'WernerP', u'count': 1721},
              {u'_id': u'ewedistrict', u'count': 1339},
              {u'_id': u'Yeliena', u'count': 1260}]}
-                             ewedistrict (University District) is very clever
+
 ```
+**ewedistrict (University District) is very clever**
+
 **No(des) Way(s)!** 
 
 ```javascript
