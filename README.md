@@ -159,9 +159,9 @@ pipeline = [{'$match':{'amenity':{'$exists':True}}},
              {u'_id': u'dentist', u'count': 7},
              {u'_id': u'drinking_water', u'count': 6}]}
 ```
-**Drinking water #20!  We know how to class it up in Seattle.
+**Drinking water #20!  We know how to class it up in Seattle.**
 
-Incidentally I queried the notes for this data set, one of the pharmacies is actually a medical marijuana dispensary.**
+Incidentally I queried the notes for this data set, one of the pharmacies is actually a medical marijuana dispensary.
 
 ```javascript
 
@@ -294,7 +294,7 @@ I considered several ways of analyzing and improving the data, as stated below.
 
 **Timestamp:**
 
-Convert the time stamp from a string to a datetime object when cleaning/reshaping the data.  This would be done by adding code here (pseudo-code in bold):
+Convert the time stamp from a string to a datetime object when cleaning/reshaping the data.  This would be done by adding code here:
 
 ```python
 for cursor in element.iter(element.tag):
@@ -307,7 +307,7 @@ for cursor in element.iter(element.tag):
                     pos.append(float(val))
 	
 	  if label == ‘timestamp’:
-	      convert label to datetime object
+	      convert label to datetime object # psuedo-code
 ```
 
 To implement the improvement you would first start by auditing that field to get an idea of how uniform it is and if there are any characters or other issues in making the conversion.  You would then clean the field and write the converter (currently beyond the scope of my knowledge but I’m teaching myself how to do this now).  Problems would be as mentioned problem characters or non-uniformity of the field.  Since this field is not user generated I don’t actually anticipate major problems.  The benefit would be the ability to easily make datetime calculations using this field.
@@ -316,10 +316,11 @@ To implement the improvement you would first start by auditing that field to get
 
    As I discovered in my analysis there are over 500 entries related to bike bicycle parking.  These are bike racks.  Here is what a typical bike rack note looks like.
 
->"note": "17TH AVE NW 0550 BLOCK W SIDE (  21) 21 FT N/O NW MARKET ST"
+>"note": "17TH AVE NW 0550 BLOCK W SIDE (21) 21 FT N/O NW MARKET ST"
 
 This could be improved in much the same way as the street names were improved, using essentially the auditing, cleaning, and reshaping process.  This would help make the note more human readable.  For example the entry above could read.
-"note": "17TH AVE Northwest 0550 BLOCK West SIDE (  21) 21First North of Northwest MARKET Street"
+
+>"note": "17TH AVE Northwest 0550 BLOCK West SIDE (21) 21 First North of Northwest MARKET Street"
 
 The only problem I see in implementing this is that it would take extra processing time and memory as well as make the DB larger.  I doubt this would be a serious problem and could be managed by carefully designed code.  If this caused any downstream performance query problems that could be managed by indexing (beyond my knowledge scope but that is where I would start.)
 
