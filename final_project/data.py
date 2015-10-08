@@ -104,7 +104,6 @@ def shape_element(element):
     node = {}
     # this section extracts the first level tag string from the cursor element
     if element.tag == "node" or element.tag == "way" :
-        # YOUR CODE HERE
         created = {}
         pos = []
         noderef = []

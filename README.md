@@ -45,7 +45,9 @@ I should mention that one major lesson I learned was how to really leverage the 
 
 ### Example Stats and queries ###
 
-***Collection stats:** db.command(‘collStats’,’myseattle’)
+```javascript
+Collection stats: db.command(‘collStats’,’myseattle’)
+```
 
 ```javascript
 {'avgObjSize': 257.08978839327483,
@@ -64,7 +66,7 @@ I should mention that one major lesson I learned was how to really leverage the 
  'userFlags': 0}
 ```
 **Number of Unique Users:**
-```
+```javascript
 pipeline = [{'$group':{'_id': '$created.user',
                            'count':{'$sum':1}}},
                 {'$group':{'_id': '$created.user',
@@ -73,13 +75,17 @@ pipeline = [{'$group':{'_id': '$created.user',
 {u'ok': 1.0, u'result': [{u'_id': None, u'count': 213}]}
 ```
 **Who are the people (adding info) to your neighborhood?**
-```
+
+```javascript
 pipeline = [{'$group':{'_id': '$created.user',
                            'count':{'$sum':1}}},
                 {'$sort': {'count': -1}},
                 {'$limit': 10}]
+```
 
-Top 10 Contributors:
+**Top 10 Contributors:**
+
+```javascript
 [{u'_id': u'SeattleImport', u'count': 308039},
              {u'_id': u'Glassman', u'count': 176165},
              {u'_id': u'Foundatron', u'count': 62301},
@@ -93,14 +99,17 @@ Top 10 Contributors:
                              ewedistrict (University District) is very clever
 ```
 **No(des) Way(s)!** 
-```
+
+```javascript
 pipeline = [{'$group':{'_id': '$type',
                            'count':{'$sum':1}}}]
 [{u'_id': u'way', u'count': 57064},
              {u'_id': u'node', u'count': 524392}]}
+```
 
 **Total Number of Amenities: 1382**
 
+```javascript
 pipeline = [{'$match':{'amenity':{'$exists':True}}},
                 {'$group':{'_id': '$amenity',
                            'count':{'$sum':1}}},
@@ -110,8 +119,9 @@ pipeline = [{'$match':{'amenity':{'$exists':True}}},
 **Oh, and 532 of them are bicycle parking, WTH!?**
 
 
-**Number of Unique Amenity Types: 55**
-```
+**Number of Unique Amenity Types:** 55
+
+```javascript
 pipeline = [{'$group':{'_id': '$amenity',
                            'count':{'$sum':1}}},
                 {'$group':{'_id': '$amenity',
@@ -121,7 +131,7 @@ pipeline = [{'$group':{'_id': '$amenity',
 
 **Top 20 Amenities:**
 
-```
+```javascript
 pipeline = [{'$match':{'amenity':{'$exists':True}}},
                 {'$group':{'_id': '$amenity',
                            'count':{'$sum':1}}},
@@ -149,10 +159,11 @@ pipeline = [{'$match':{'amenity':{'$exists':True}}},
              {u'_id': u'dentist', u'count': 7},
              {u'_id': u'drinking_water', u'count': 6}]}
 ```
-**Drinking water #20!  We know how to class it up in Seattle
+**Drinking water #20!  We know how to class it up in Seattle.
+
 Incidentally I queried the notes for this data set, one of the pharmacies is actually a medical marijuana dispensary.**
 
-```
+```javascript
 
 pipeline = [{'$match':{'note':{'$exists':True}}},
                 {'$match':{'amenity': 'pharmacy'}},
@@ -176,7 +187,7 @@ pipeline = [{'$match':{'shop':{'$exists':True}}},
 
 **Number of Unique Shop Types:** 91
 
-```
+```javascript
 pipeline = [{'$match':{'shop':{'$exists':True}}},
                 {'$group':{'_id': '$shop',
                            'count':{'$sum':1}}},
@@ -185,7 +196,11 @@ pipeline = [{'$match':{'shop':{'$exists':True}}},
 
 {u'ok': 1.0, u'result': [{u'_id': None, u'count': 91}]}
 
-Top 20 Shops
+```
+
+**Top 20 Shops**
+
+```javascript
 pipeline = [{'$match':{'shop':{'$exists':True}}},
                 {'$group':{'_id': '$shop',
                            'count':{'$sum':1}}},
@@ -218,7 +233,7 @@ pipeline = [{'$match':{'shop':{'$exists':True}}},
 
 **Another useful note:**
 
-```
+```javascript
 pipeline = [{'$match':{'note':{'$exists':True}}},
                 {'$match':{'name': 'Hubbard Homestead Park'}},
                 {'$group':{'_id': '$leisure',
@@ -309,7 +324,7 @@ This could be improved in much the same way as the street names were improved, u
 The only problem I see in implementing this is that it would take extra processing time and memory as well as make the DB larger.  I doubt this would be a serious problem and could be managed by carefully designed code.  If this caused any downstream performance query problems that could be managed by indexing (beyond my knowledge scope but that is where I would start.)
 
 
-### Relevance ###
+### Addressing Relevance of Map Data ###
 
   This one is a stretch and really beyond my current knowledge scope but I put it here to demonstrate my thought process on the data set and how issues of sparseness and outdated entries might be handled.
 
@@ -327,4 +342,3 @@ I would do this by use of the time stamp and the position fields.
 -	Some of the details of doing this or its validity are beyond the scope of my current knowledge.  However, I do know that in preparing the data that the date time field should be converted from a string to a datetime object.  This might require additional cleaning.
 -	Implementing this might cause performance issues depending on how often you were going to update the freshness field.
 -	The best way to calculate freshness is not clear to me (most recently updated entry in an area, average age of the data in the area?).  This is an important choice and some trial and error as well as validation would be involved.  
-
